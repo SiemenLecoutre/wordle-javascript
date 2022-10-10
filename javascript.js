@@ -65,6 +65,7 @@ const testWord = async () => {
   setLoading(false);
   //   If word is valid
   if (processedResponse.validWord) {
+    const map = makeMap(wordOfTheDay);
     // Check two arrays
     for (let i = 0; i < userWord.length; i++) {
       // Add filled box to each letter
@@ -72,13 +73,15 @@ const testWord = async () => {
         .getElementsByClassName('letter-row')
         [6 - guessesRemaining].children[i].classList.add('filled-box');
       for (let j = 0; j < wordOfTheDay.length; j++) {
-        // for same character at same index
         if (userWord[i] === wordOfTheDay[i]) {
+          // for same character at same index (mark as correct)
           document
             .getElementsByClassName('letter-row')
             [6 - guessesRemaining].children[i].classList.add('green-box');
-          // If character is in wordoftheday but not at same index
-        } else if (userWord[i] === wordOfTheDay[j]) {
+          map[userWord[i]]--;
+        } else if (userWord[i] === wordOfTheDay[j] && map[userWord[i] > 0]) {
+          // Mark as close if it exists in the string at the wrong place.
+          // Only mark it if that (or those) letters have not already been marked
           document
             .getElementsByClassName('letter-row')
             [6 - guessesRemaining].children[i].classList.add('orange-box');
@@ -93,9 +96,6 @@ const testWord = async () => {
   } else {
     // If not valid word, make boxes red animation
     for (let i = 0; i < 5; i++) {
-      //   document
-      //     .getElementsByClassName('letter-row')
-      //     [6 - guessesRemaining].children[i].classList.add('red-box');
       document.getElementsByClassName('letter-row')[
         6 - guessesRemaining
       ].children[i].className = 'letter-box';
@@ -108,6 +108,21 @@ const testWord = async () => {
       });
     }
   }
+};
+
+// Check how many of each letter are in the word
+const makeMap = (array) => {
+  const obj = {};
+  for (let i = 0; i < array.length; i++) {
+    const letter = array[i];
+    if (obj[letter]) {
+      obj[letter]++;
+    } else {
+      obj[letter] = 1;
+    }
+  }
+
+  return obj;
 };
 
 const newGuess = () => {
