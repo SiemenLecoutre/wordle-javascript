@@ -6,7 +6,12 @@ let nextLetter = 0;
 
 const init = () => {
   getWordOfTheDay();
+  initBoard();
   document.addEventListener('keyup', onKeyUp, false);
+};
+
+const setLoading = (isLoading) => {
+  document.querySelector('.spinner').classList.toggle('hidden', !isLoading);
 };
 
 function initBoard() {
@@ -28,13 +33,13 @@ function initBoard() {
 
 const getWordOfTheDay = async () => {
   // Add spinner while loading
-  document.querySelector('.spinner').classList.remove('hidden');
+  setLoading(true);
 
   const promise = await fetch('https://words.dev-apis.com/word-of-the-day');
   const processedResponse = await promise.json();
   wordOfTheDay = processedResponse.word.toUpperCase().split('');
 
-  document.querySelector('.spinner').classList.add('hidden');
+  setLoading(false);
 };
 
 const onKeyUp = (e) => {
@@ -48,7 +53,7 @@ const onKeyUp = (e) => {
 };
 
 const testWord = async () => {
-  document.querySelector('.spinner').classList.remove('hidden');
+  setLoading(true);
 
   const promise = await fetch('https://words.dev-apis.com/validate-word', {
     method: 'POST',
@@ -57,7 +62,7 @@ const testWord = async () => {
   });
   const processedResponse = await promise.json();
 
-  document.querySelector('.spinner').classList.add('hidden');
+  setLoading(false);
   //   If word is valid
   if (processedResponse.validWord) {
     // Check two arrays
@@ -146,7 +151,5 @@ const removeLetter = () => {
     box.classList.remove('filled-box');
   }
 };
-
-initBoard();
 
 init();
