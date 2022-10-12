@@ -79,7 +79,7 @@ const testWord = async () => {
             .getElementsByClassName('letter-row')
             [6 - guessesRemaining].children[i].classList.add('green-box');
           map[userWord[i]]--;
-        } else if (userWord[i] === wordOfTheDay[j] && (map[guessParts[i]] && map[guessParts[i]] > 0)) {
+        } else if (userWord[i] === wordOfTheDay[j] && (map[userWord[i]] && map[userWord[i]] > 0)) {
           // Mark as close if it exists in the string at the wrong place.
           // Only mark it if that (or those) letters have not already been marked
           document
