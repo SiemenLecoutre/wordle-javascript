@@ -85,6 +85,7 @@ const testWord = async () => {
           document
             .getElementsByClassName('letter-row')
             [6 - guessesRemaining].children[i].classList.add('orange-box');
+          map[userWord[i]]--;
         }
       }
     }
