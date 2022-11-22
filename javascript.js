@@ -1,4 +1,4 @@
-let wordOfTheDay = '';
+let wordOfTheDay = "";
 let userWord = [];
 const NUMBER_OF_GUESSES = 6;
 let guessesRemaining = NUMBER_OF_GUESSES;
@@ -7,23 +7,23 @@ let nextLetter = 0;
 const init = () => {
   getWordOfTheDay();
   initBoard();
-  document.addEventListener('keyup', onKeyUp, false);
+  document.addEventListener("keyup", onKeyUp, false);
 };
 
 const setLoading = (isLoading) => {
-  document.querySelector('.spinner').classList.toggle('hidden', !isLoading);
+  document.querySelector(".spinner").classList.toggle("hidden", !isLoading);
 };
 
 function initBoard() {
-  let board = document.getElementById('word-grid');
+  let board = document.getElementById("word-grid");
 
   for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
-    let row = document.createElement('div');
-    row.className = 'letter-row';
+    let row = document.createElement("div");
+    row.className = "letter-row";
 
     for (let j = 0; j < 5; j++) {
-      let box = document.createElement('div');
-      box.className = 'letter-box';
+      let box = document.createElement("div");
+      box.className = "letter-box";
       row.appendChild(box);
     }
 
@@ -35,19 +35,18 @@ const getWordOfTheDay = async () => {
   // Add spinner while loading
   setLoading(true);
 
-  const promise = await fetch('https://words.dev-apis.com/word-of-the-day');
+  const promise = await fetch("https://words.dev-apis.com/word-of-the-day");
   const processedResponse = await promise.json();
-  wordOfTheDay = processedResponse.word.toUpperCase().split('');
-
+  wordOfTheDay = processedResponse.word.toUpperCase().split("");
   setLoading(false);
 };
 
 const onKeyUp = (e) => {
   if (e.key.length === 1 && e.key.match(/[a-z]/i) && userWord.length < 5) {
     insertLetter(e.key);
-  } else if (e.key === 'Backspace') {
+  } else if (e.key === "Backspace") {
     removeLetter();
-  } else if (e.key === 'Enter' && userWord.length === 5) {
+  } else if (e.key === "Enter" && userWord.length === 5) {
     testWord();
   }
 };
@@ -55,10 +54,10 @@ const onKeyUp = (e) => {
 const testWord = async () => {
   setLoading(true);
 
-  const promise = await fetch('https://words.dev-apis.com/validate-word', {
-    method: 'POST',
+  const promise = await fetch("https://words.dev-apis.com/validate-word", {
+    method: "POST",
     // Convert the userword array to string and send it
-    body: JSON.stringify({ 'word': userWord.join('') }),
+    body: JSON.stringify({ word: userWord.join("") })
   });
   const processedResponse = await promise.json();
 
@@ -70,6 +69,7 @@ const testWord = async () => {
     for (let i = 0; i < userWord.length; i++) {
       // Add filled box to each letter
       document
+<<<<<<< HEAD
         .getElementsByClassName('letter-row')
       [6 - guessesRemaining].children[i].classList.add('filled-box');
       for (let j = 0; j < wordOfTheDay.length; j++) {
@@ -85,25 +85,62 @@ const testWord = async () => {
           document
             .getElementsByClassName('letter-row')
           [6 - guessesRemaining].children[i].classList.add('orange-box');
+=======
+        .getElementsByClassName("letter-row")
+        [6 - guessesRemaining].children[i].classList.add("filled-box");
+
+      if (userWord[i] === wordOfTheDay[i]) {
+        // Mark as close if it exists in the string at the wrong place.
+        // Only mark it if that (or those) letters have not already been marked
+        if (map[userWord[i]] > 0) {
+          document
+            .getElementsByClassName("letter-row")
+            [6 - guessesRemaining].children[i].classList.add("green-box");
+          map[userWord[i]]--;
+        }
+      }
+    }
+
+    for (let i = 0; i < userWord.length; i++) {
+      for (let j = 0; j < wordOfTheDay.length; j++) {
+        if (userWord[i] === wordOfTheDay[i]) {
+          // Mark as close if it exists in the string at the wrong place.
+          // Only mark it if that (or those) letters have not already been marked
+          if (map[userWord[i]] > 0) {
+            document
+              .getElementsByClassName("letter-row")
+              [6 - guessesRemaining].children[i].classList.add("green-box");
+            map[userWord[i]]--;
+          }
+        }
+        if (userWord[i] === wordOfTheDay[j]) {
+          // for same character at same index (mark as correct)
+          if (map[userWord[i]] > 0) {
+            document
+              .getElementsByClassName("letter-row")
+              [6 - guessesRemaining].children[i].classList.add("orange-box");
+            map[userWord[i]]--;
+          }
+>>>>>>> 2506956ff3a3c503319f377969319a20cf05b35c
         }
       }
     }
     // If userword is equal to wordoftheday
-    if (userWord.join('') === wordOfTheDay.join('')) {
+    if (userWord.join("") === wordOfTheDay.join("")) {
       gameWon();
     }
     newGuess();
   } else {
     // If not valid word, make boxes red animation
     for (let i = 0; i < 5; i++) {
-      document.getElementsByClassName('letter-row')[
+      document.getElementsByClassName("letter-row")[
         6 - guessesRemaining
-      ].children[i].className = 'letter-box';
+      ].children[i].className = "letter-box";
       requestAnimationFrame((time) => {
         requestAnimationFrame((time) => {
-          document.getElementsByClassName('letter-row')[
+          document.getElementsByClassName("letter-row")[
             6 - guessesRemaining
-          ].children[i].className = 'letter-box red-box';
+          ].children[i].className = "letter-box red-box";
         });
       });
     }
@@ -135,19 +172,20 @@ const newGuess = () => {
 };
 
 const gameLost = () => {
-  document.querySelector('.losing-text').style.display = 'block';
+  document.querySelector(".losing-text").style.display = "block";
 };
 
 const gameWon = () => {
-  document.querySelector('.winning-text').style.display = 'block';
-  document.querySelector('.title').classList.add('rainbow');
+  document.querySelector(".winning-text").style.display = "block";
+  document.querySelector(".title").classList.add("rainbow");
   guessesRemaining = 0;
 };
 
 const insertLetter = (pressedKey) => {
   if (nextLetter >= 0 && nextLetter < 6 && guessesRemaining > 0) {
-    let row =
-      document.getElementsByClassName('letter-row')[6 - guessesRemaining];
+    let row = document.getElementsByClassName("letter-row")[
+      6 - guessesRemaining
+    ];
     let box = row.children[nextLetter];
     box.textContent = pressedKey.toUpperCase();
     userWord.push(pressedKey.toUpperCase());
@@ -158,12 +196,13 @@ const insertLetter = (pressedKey) => {
 const removeLetter = () => {
   if (nextLetter >= 1 && nextLetter < 6) {
     nextLetter -= 1;
-    let row =
-      document.getElementsByClassName('letter-row')[6 - guessesRemaining];
+    let row = document.getElementsByClassName("letter-row")[
+      6 - guessesRemaining
+    ];
     let box = row.children[nextLetter];
     userWord.pop();
-    box.textContent = '';
-    box.classList.remove('filled-box');
+    box.textContent = "";
+    box.classList.remove("filled-box");
   }
 };
 
