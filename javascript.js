@@ -71,20 +71,20 @@ const testWord = async () => {
       // Add filled box to each letter
       document
         .getElementsByClassName('letter-row')
-        [6 - guessesRemaining].children[i].classList.add('filled-box');
+      [6 - guessesRemaining].children[i].classList.add('filled-box');
       for (let j = 0; j < wordOfTheDay.length; j++) {
         if (userWord[i] === wordOfTheDay[i]) {
           // for same character at same index (mark as correct)
           document
             .getElementsByClassName('letter-row')
-            [6 - guessesRemaining].children[i].classList.add('green-box');
+          [6 - guessesRemaining].children[i].classList.add('green-box');
           map[userWord[i]]--;
         } else if (userWord[i] === wordOfTheDay[j] && map[userWord[i] > 0]) {
           // Mark as close if it exists in the string at the wrong place.
           // Only mark it if that (or those) letters have not already been marked
           document
             .getElementsByClassName('letter-row')
-            [6 - guessesRemaining].children[i].classList.add('orange-box');
+          [6 - guessesRemaining].children[i].classList.add('orange-box');
         }
       }
     }
